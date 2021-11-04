@@ -1,0 +1,36 @@
+type RangeOrder @entity {
+  id: ID!
+  status: RangeOrderStatus!
+  creator: String!
+  tickThreshold: BigInt!
+  zeroForOne: Boolean!
+  ejectDust: Boolean!
+  amountIn: BigInt!
+  amount0Min: BigInt
+  amount1Min: BigInt
+  receiver: String!
+  feeToken: String!
+  resolver: String!
+  maxFeeAmount: BigInt!
+  feeAmount: BigInt
+  amount0: BigInt
+  amount1: BigInt
+  pool: String
+  token0: String
+  token1: String
+  poolFee: BigInt
+  submittedTxHash: Bytes!
+  executedTxHash: Bytes
+  cancelledTxHash: Bytes
+  createdAt: BigInt!
+  updatedAt: BigInt!
+  createdAtBlock: BigInt!
+  updatedAtBlock: BigInt!
+  updatedAtBlockHash: String!
+}
+
+enum RangeOrderStatus @entity {
+  submitted
+  executed
+  cancelled
+}
