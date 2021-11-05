@@ -26,7 +26,7 @@ type RangeOrder @entity {
   updatedAt: BigInt!
   createdAtBlock: BigInt!
   updatedAtBlock: BigInt!
-  updatedAtBlockHash: String!
+  updatedAtBlockHash: Bytes!
 }
 
 enum RangeOrderStatus @entity {

@@ -364,12 +364,12 @@ export class RangeOrder extends Entity {
     this.set("updatedAtBlock", Value.fromBigInt(value));
   }
 
-  get updatedAtBlockHash(): string {
+  get updatedAtBlockHash(): Bytes {
     let value = this.get("updatedAtBlockHash");
-    return value.toString();
+    return value.toBytes();
   }
 
-  set updatedAtBlockHash(value: string) {
-    this.set("updatedAtBlockHash", Value.fromString(value));
+  set updatedAtBlockHash(value: Bytes) {
+    this.set("updatedAtBlockHash", Value.fromBytes(value));
   }
 }
