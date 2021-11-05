@@ -19,15 +19,15 @@ export function handleSetEjectLP(event: LogSetEject): void {
   entity.updatedAt = event.block.timestamp;
   entity.createdAtBlock = event.block.number;
   entity.updatedAtBlock = event.block.number;
-  entity.updatedAtBlockHash = event.block.hash.toHexString();
+  entity.updatedAtBlockHash = event.block.hash;
 
   let offset: i32 = 33; // Don't take into account tokenId inside orderParams.
   let orderParams: string = event.params.orderParams.toHexString();
   entity.tickThreshold = extractBigInt(orderParams, offset, 32);
   offset += 32;
-  entity.zeroForOne = extractBoolean(orderParams, offset, 32);
+  entity.zeroForOne = extractBoolean(orderParams, offset);
   offset += 32;
-  entity.ejectDust = extractBoolean(orderParams, offset, 32);
+  entity.ejectDust = extractBoolean(orderParams, offset);
   offset += 32;
   entity.amount0Min = extractBigInt(orderParams, offset, 32);
   offset += 32;
@@ -58,7 +58,7 @@ export function handleEjectLP(
   entity.executedTxHash = event.transaction.hash;
   entity.updatedAt = event.block.timestamp;
   entity.updatedAtBlock = event.block.number;
-  entity.updatedAtBlockHash = event.block.hash.toHexString();
+  entity.updatedAtBlockHash = event.block.hash;
 
   entity.amount0 = event.params.amount0Out;
   entity.amount1 = event.params.amount1Out;
@@ -81,7 +81,7 @@ export function handleCancel(
   entity.cancelledTxHash = event.transaction.hash;
   entity.updatedAt = event.block.timestamp;
   entity.updatedAtBlock = event.block.number;
-  entity.updatedAtBlockHash = event.block.hash.toHexString();
+  entity.updatedAtBlockHash = event.block.hash;
 
   entity.save();
 }
