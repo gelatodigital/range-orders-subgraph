@@ -75,12 +75,54 @@ export class LogSetEject__Params {
     return this._event.parameters[0].value.toBigInt();
   }
 
-  get orderParams(): Bytes {
-    return this._event.parameters[1].value.toBytes();
+  get orderParams(): LogSetEjectOrderParamsStruct {
+    return this._event.parameters[1].value.toTuple() as LogSetEjectOrderParamsStruct;
   }
 
   get sender(): Address {
     return this._event.parameters[2].value.toAddress();
+  }
+}
+
+export class LogSetEjectOrderParamsStruct extends ethereum.Tuple {
+  get tokenId(): BigInt {
+    return this[0].toBigInt();
+  }
+
+  get tickThreshold(): i32 {
+    return this[1].toI32();
+  }
+
+  get ejectAbove(): boolean {
+    return this[2].toBoolean();
+  }
+
+  get ejectDust(): boolean {
+    return this[3].toBoolean();
+  }
+
+  get amount0Min(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get amount1Min(): BigInt {
+    return this[5].toBigInt();
+  }
+
+  get receiver(): Address {
+    return this[6].toAddress();
+  }
+
+  get feeToken(): Address {
+    return this[7].toAddress();
+  }
+
+  get resolver(): Address {
+    return this[8].toAddress();
+  }
+
+  get maxFeeAmount(): BigInt {
+    return this[9].toBigInt();
   }
 }
 

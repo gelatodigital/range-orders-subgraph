@@ -1,7 +1,6 @@
-import { log } from "@graphprotocol/graph-ts";
+import { log, BigInt } from "@graphprotocol/graph-ts";
 import { RangeOrder } from "../../generated/schema";
 import {LogSetEject, LogEject, LogCancelEject} from "../../generated/EjectLP/EjectLP";
-import { extractBigInt, extractAddressFromBytes32, extractBoolean } from "../utils/helpers";
 
 export function handleSetEjectLP(event: LogSetEject): void {
   let entity = RangeOrder.load(event.params.tokenId.toString());
@@ -21,25 +20,15 @@ export function handleSetEjectLP(event: LogSetEject): void {
   entity.updatedAtBlock = event.block.number;
   entity.updatedAtBlockHash = event.block.hash;
 
-  let offset: i32 = 33; // Don't take into account tokenId inside orderParams.
-  let orderParams: string = event.params.orderParams.toHexString();
-  entity.tickThreshold = extractBigInt(orderParams, offset, 32);
-  offset += 32;
-  entity.zeroForOne = extractBoolean(orderParams, offset);
-  offset += 32;
-  entity.ejectDust = extractBoolean(orderParams, offset);
-  offset += 32;
-  entity.amount0Min = extractBigInt(orderParams, offset, 32);
-  offset += 32;
-  entity.amount1Min = extractBigInt(orderParams, offset, 32);
-  offset += 32;
-  entity.receiver = extractAddressFromBytes32(orderParams, offset);
-  offset += 32;
-  entity.feeToken = extractAddressFromBytes32(orderParams, offset);
-  offset += 32;
-  entity.resolver = extractAddressFromBytes32(orderParams, offset);
-  offset += 32;
-  entity.maxFeeAmount = extractBigInt(orderParams, offset, 32);
+  entity.tickThreshold = BigInt.fromI32(event.params.orderParams.tickThreshold);
+  entity.zeroForOne = event.params.orderParams.ejectAbove;
+  entity.ejectDust = event.params.orderParams.ejectDust;
+  entity.amount0Min = event.params.orderParams.amount0Min;
+  entity.amount1Min = event.params.orderParams.amount1Min;
+  entity.receiver = event.params.orderParams.receiver.toHexString();
+  entity.feeToken = event.params.orderParams.feeToken.toHexString();
+  entity.resolver = event.params.orderParams.resolver.toHexString();
+  entity.maxFeeAmount = event.params.orderParams.maxFeeAmount;
 
   entity.save();
 }

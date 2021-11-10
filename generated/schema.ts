@@ -87,13 +87,21 @@ export class RangeOrder extends Entity {
     this.set("ejectDust", Value.fromBoolean(value));
   }
 
-  get amountIn(): BigInt {
+  get amountIn(): BigInt | null {
     let value = this.get("amountIn");
-    return value.toBigInt();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toBigInt();
+    }
   }
 
-  set amountIn(value: BigInt) {
-    this.set("amountIn", Value.fromBigInt(value));
+  set amountIn(value: BigInt | null) {
+    if (value === null) {
+      this.unset("amountIn");
+    } else {
+      this.set("amountIn", Value.fromBigInt(value as BigInt));
+    }
   }
 
   get amount0Min(): BigInt | null {

@@ -5,7 +5,7 @@ type RangeOrder @entity {
   tickThreshold: BigInt!
   zeroForOne: Boolean!
   ejectDust: Boolean!
-  amountIn: BigInt!
+  amountIn: BigInt
   amount0Min: BigInt
   amount1Min: BigInt
   receiver: String!
