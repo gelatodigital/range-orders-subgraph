@@ -21,7 +21,7 @@ dataSources:
         - name: EjectLP
           file: ./abis/EjectLP.json
       eventHandlers:
-        - event: LogSetEject(indexed uint256,(indexed uint256,int24,bool,bool,uint256,uint256,address,address,address,uint256),address)
+        - event: LogSetEject(indexed uint256,(uint256,int24,bool,bool,uint256,uint256,address,address,address,uint256),address)
           handler: handleSetEjectLP
         - event: LogEject(indexed uint256,uint256,uint256,uint256)
           handler: handleEjectLP

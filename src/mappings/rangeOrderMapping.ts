@@ -12,7 +12,7 @@ export function handleSetRangeOrder(event: LogSetRangeOrder): void {
 
   entity.pool = event.params.pool.toHexString();
   entity.token0 = event.params.token0.toHexString();
-  entity.token1 = event.params.token0.toHexString();
+  entity.token1 = event.params.token1.toHexString();
   entity.poolFee = BigInt.fromI32(event.params.fee);
   entity.amountIn = event.params.amountIn;
   entity.creator = event.params.creator.toHexString();
