@@ -45,6 +45,6 @@ dataSources:
         - name: RangeOrder
           file: ./abis/RangeOrder.json
       eventHandlers:
-        - event: LogSetRangeOrder(indexed uint256,address,address,address,uint24,uint256,address)
+        - event: LogSetRangeOrder(indexed uint256,address,uint256)
           handler: handleSetRangeOrder
       file: ./src/mappings/rangeOrderMapping.ts

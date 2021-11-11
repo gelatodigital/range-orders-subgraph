@@ -1,7 +1,7 @@
 type RangeOrder @entity {
   id: ID!
   status: RangeOrderStatus!
-  creator: String!
+  creator: String
   tickThreshold: BigInt!
   zeroForOne: Boolean!
   ejectDust: Boolean!
@@ -16,9 +16,6 @@ type RangeOrder @entity {
   amount0: BigInt
   amount1: BigInt
   pool: String
-  token0: String
-  token1: String
-  poolFee: BigInt
   submittedTxHash: Bytes!
   executedTxHash: Bytes
   cancelledTxHash: Bytes

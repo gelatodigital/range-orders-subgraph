@@ -31,24 +31,8 @@ export class LogSetRangeOrder__Params {
     return this._event.parameters[1].value.toAddress();
   }
 
-  get token0(): Address {
-    return this._event.parameters[2].value.toAddress();
-  }
-
-  get token1(): Address {
-    return this._event.parameters[3].value.toAddress();
-  }
-
-  get fee(): i32 {
-    return this._event.parameters[4].value.toI32();
-  }
-
   get amountIn(): BigInt {
-    return this._event.parameters[5].value.toBigInt();
-  }
-
-  get creator(): Address {
-    return this._event.parameters[6].value.toAddress();
+    return this._event.parameters[2].value.toBigInt();
   }
 }
 
@@ -80,25 +64,6 @@ export class RangeOrder extends ethereum.SmartContract {
 
   try_eject(): ethereum.CallResult<Address> {
     let result = super.tryCall("eject", "eject():(address)", []);
-    if (result.reverted) {
-      return new ethereum.CallResult();
-    }
-    let value = result.value;
-    return ethereum.CallResult.fromValue(value[0].toAddress());
-  }
-
-  ejectResolver(): Address {
-    let result = super.call("ejectResolver", "ejectResolver():(address)", []);
-
-    return result[0].toAddress();
-  }
-
-  try_ejectResolver(): ethereum.CallResult<Address> {
-    let result = super.tryCall(
-      "ejectResolver",
-      "ejectResolver():(address)",
-      []
-    );
     if (result.reverted) {
       return new ethereum.CallResult();
     }
@@ -148,6 +113,29 @@ export class RangeOrder extends ethereum.SmartContract {
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
+
+  rangeOrderResolver(): Address {
+    let result = super.call(
+      "rangeOrderResolver",
+      "rangeOrderResolver():(address)",
+      []
+    );
+
+    return result[0].toAddress();
+  }
+
+  try_rangeOrderResolver(): ethereum.CallResult<Address> {
+    let result = super.tryCall(
+      "rangeOrderResolver",
+      "rangeOrderResolver():(address)",
+      []
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
 }
 
 export class ConstructorCall extends ethereum.Call {
@@ -175,7 +163,7 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get ejectResolver_(): Address {
+  get rangeOrderResolver_(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 }
