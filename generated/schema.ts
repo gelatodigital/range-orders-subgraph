@@ -51,13 +51,21 @@ export class RangeOrder extends Entity {
     this.set("status", Value.fromString(value));
   }
 
-  get creator(): string {
+  get creator(): string | null {
     let value = this.get("creator");
-    return value.toString();
+    if (value === null || value.kind == ValueKind.NULL) {
+      return null;
+    } else {
+      return value.toString();
+    }
   }
 
-  set creator(value: string) {
-    this.set("creator", Value.fromString(value));
+  set creator(value: string | null) {
+    if (value === null) {
+      this.unset("creator");
+    } else {
+      this.set("creator", Value.fromString(value as string));
+    }
   }
 
   get tickThreshold(): BigInt {
@@ -239,57 +247,6 @@ export class RangeOrder extends Entity {
       this.unset("pool");
     } else {
       this.set("pool", Value.fromString(value as string));
-    }
-  }
-
-  get token0(): string | null {
-    let value = this.get("token0");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set token0(value: string | null) {
-    if (value === null) {
-      this.unset("token0");
-    } else {
-      this.set("token0", Value.fromString(value as string));
-    }
-  }
-
-  get token1(): string | null {
-    let value = this.get("token1");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toString();
-    }
-  }
-
-  set token1(value: string | null) {
-    if (value === null) {
-      this.unset("token1");
-    } else {
-      this.set("token1", Value.fromString(value as string));
-    }
-  }
-
-  get poolFee(): BigInt | null {
-    let value = this.get("poolFee");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set poolFee(value: BigInt | null) {
-    if (value === null) {
-      this.unset("poolFee");
-    } else {
-      this.set("poolFee", Value.fromBigInt(value as BigInt));
     }
   }
 

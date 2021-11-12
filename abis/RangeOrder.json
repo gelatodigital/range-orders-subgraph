@@ -13,7 +13,7 @@
       },
       {
         "internalType": "address",
-        "name": "ejectResolver_",
+        "name": "rangeOrderResolver_",
         "type": "address"
       }
     ],
@@ -37,33 +37,9 @@
       },
       {
         "indexed": false,
-        "internalType": "address",
-        "name": "token0",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "token1",
-        "type": "address"
-      },
-      {
-        "indexed": false,
-        "internalType": "uint24",
-        "name": "fee",
-        "type": "uint24"
-      },
-      {
-        "indexed": false,
         "internalType": "uint256",
         "name": "amountIn",
         "type": "uint256"
-      },
-      {
-        "indexed": false,
-        "internalType": "address",
-        "name": "creator",
-        "type": "address"
       }
     ],
     "name": "LogSetRangeOrder",
@@ -92,7 +68,7 @@
       {
         "components": [
           {
-            "internalType": "address",
+            "internalType": "contract IUniswapV3Pool",
             "name": "pool",
             "type": "address"
           },
@@ -156,19 +132,6 @@
     "type": "function"
   },
   {
-    "inputs": [],
-    "name": "ejectResolver",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
     "inputs": [
       {
         "internalType": "address",
@@ -203,11 +166,24 @@
     "type": "function"
   },
   {
+    "inputs": [],
+    "name": "rangeOrderResolver",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
     "inputs": [
       {
         "components": [
           {
-            "internalType": "address",
+            "internalType": "contract IUniswapV3Pool",
             "name": "pool",
             "type": "address"
           },

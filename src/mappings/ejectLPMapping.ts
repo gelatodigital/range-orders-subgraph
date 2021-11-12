@@ -10,7 +10,6 @@ export function handleSetEjectLP(event: LogSetEject): void {
   } else {
     entity = new RangeOrder(event.params.tokenId.toString());
   }
-  entity.creator = event.params.sender.toHexString();
 
   entity.status = "submitted";
   entity.submittedTxHash = event.transaction.hash;
