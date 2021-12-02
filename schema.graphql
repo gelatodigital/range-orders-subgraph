@@ -5,6 +5,8 @@ type RangeOrder @entity {
   tickThreshold: BigInt!
   zeroForOne: Boolean!
   ejectDust: Boolean!
+  startTime: BigInt!
+  expiryTime: BigInt!
   amountIn: BigInt
   amount0Min: BigInt
   amount1Min: BigInt

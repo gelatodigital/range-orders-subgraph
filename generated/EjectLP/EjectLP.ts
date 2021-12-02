@@ -79,8 +79,12 @@ export class LogSetEject__Params {
     return this._event.parameters[1].value.toTuple() as LogSetEjectOrderParamsStruct;
   }
 
+  get startTime(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
   get sender(): Address {
-    return this._event.parameters[2].value.toAddress();
+    return this._event.parameters[3].value.toAddress();
   }
 }
 
@@ -123,6 +127,42 @@ export class LogSetEjectOrderParamsStruct extends ethereum.Tuple {
 
   get maxFeeAmount(): BigInt {
     return this[9].toBigInt();
+  }
+}
+
+export class Paused extends ethereum.Event {
+  get params(): Paused__Params {
+    return new Paused__Params(this);
+  }
+}
+
+export class Paused__Params {
+  _event: Paused;
+
+  constructor(event: Paused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class Unpaused extends ethereum.Event {
+  get params(): Unpaused__Params {
+    return new Unpaused__Params(this);
+  }
+}
+
+export class Unpaused__Params {
+  _event: Unpaused;
+
+  constructor(event: Unpaused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
   }
 }
 
@@ -178,6 +218,10 @@ export class EjectLP__canEjectInputOrder_Struct extends ethereum.Tuple {
   get maxFeeAmount(): BigInt {
     return this[7].toBigInt();
   }
+
+  get startTime(): BigInt {
+    return this[8].toBigInt();
+  }
 }
 
 export class EjectLP extends ethereum.SmartContract {
@@ -192,7 +236,7 @@ export class EjectLP extends ethereum.SmartContract {
   ): EjectLP__canEjectResult {
     let result = super.call(
       "canEject",
-      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256),address):(address,address,uint128)",
+      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256,uint256),address):(address,address,uint128)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId_),
         ethereum.Value.fromTuple(order_),
@@ -214,7 +258,7 @@ export class EjectLP extends ethereum.SmartContract {
   ): ethereum.CallResult<EjectLP__canEjectResult> {
     let result = super.tryCall(
       "canEject",
-      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256),address):(address,address,uint128)",
+      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256,uint256),address):(address,address,uint128)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId_),
         ethereum.Value.fromTuple(order_),
@@ -232,6 +276,21 @@ export class EjectLP extends ethereum.SmartContract {
         value[2].toBigInt()
       )
     );
+  }
+
+  duration(): BigInt {
+    let result = super.call("duration", "duration():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_duration(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("duration", "duration():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   hashById(param0: BigInt): Bytes {
@@ -253,6 +312,21 @@ export class EjectLP extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  minimumFee(): BigInt {
+    let result = super.call("minimumFee", "minimumFee():(uint256)", []);
+
+    return result[0].toBigInt();
+  }
+
+  try_minimumFee(): ethereum.CallResult<BigInt> {
+    let result = super.tryCall("minimumFee", "minimumFee():(uint256)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
   nftPositions(): Address {
     let result = super.call("nftPositions", "nftPositions():(address)", []);
 
@@ -266,6 +340,21 @@ export class EjectLP extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  paused(): boolean {
+    let result = super.call("paused", "paused():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_paused(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("paused", "paused():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   pokeMe(): Address {
@@ -324,11 +413,11 @@ export class ConstructorCall__Inputs {
     return this._call.inputValues[0].value.toAddress();
   }
 
-  get factory_(): Address {
+  get pokeMe_(): Address {
     return this._call.inputValues[1].value.toAddress();
   }
 
-  get pokeMe_(): Address {
+  get factory_(): Address {
     return this._call.inputValues[2].value.toAddress();
   }
 
@@ -411,6 +500,10 @@ export class CancelCallOrder_Struct extends ethereum.Tuple {
   get maxFeeAmount(): BigInt {
     return this[7].toBigInt();
   }
+
+  get startTime(): BigInt {
+    return this[8].toBigInt();
+  }
 }
 
 export class EjectCall extends ethereum.Call {
@@ -478,6 +571,130 @@ export class EjectCallOrder_Struct extends ethereum.Tuple {
 
   get maxFeeAmount(): BigInt {
     return this[7].toBigInt();
+  }
+
+  get startTime(): BigInt {
+    return this[8].toBigInt();
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class MulipleRetrieveDustCall extends ethereum.Call {
+  get inputs(): MulipleRetrieveDustCall__Inputs {
+    return new MulipleRetrieveDustCall__Inputs(this);
+  }
+
+  get outputs(): MulipleRetrieveDustCall__Outputs {
+    return new MulipleRetrieveDustCall__Outputs(this);
+  }
+}
+
+export class MulipleRetrieveDustCall__Inputs {
+  _call: MulipleRetrieveDustCall;
+
+  constructor(call: MulipleRetrieveDustCall) {
+    this._call = call;
+  }
+
+  get tokens_(): Array<Address> {
+    return this._call.inputValues[0].value.toAddressArray();
+  }
+
+  get recipient_(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class MulipleRetrieveDustCall__Outputs {
+  _call: MulipleRetrieveDustCall;
+
+  constructor(call: MulipleRetrieveDustCall) {
+    this._call = call;
+  }
+}
+
+export class PauseCall extends ethereum.Call {
+  get inputs(): PauseCall__Inputs {
+    return new PauseCall__Inputs(this);
+  }
+
+  get outputs(): PauseCall__Outputs {
+    return new PauseCall__Outputs(this);
+  }
+}
+
+export class PauseCall__Inputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
+  }
+}
+
+export class PauseCall__Outputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
+  }
+}
+
+export class RetrieveDustCall extends ethereum.Call {
+  get inputs(): RetrieveDustCall__Inputs {
+    return new RetrieveDustCall__Inputs(this);
+  }
+
+  get outputs(): RetrieveDustCall__Outputs {
+    return new RetrieveDustCall__Outputs(this);
+  }
+}
+
+export class RetrieveDustCall__Inputs {
+  _call: RetrieveDustCall;
+
+  constructor(call: RetrieveDustCall) {
+    this._call = call;
+  }
+
+  get token_(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get recipient_(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+}
+
+export class RetrieveDustCall__Outputs {
+  _call: RetrieveDustCall;
+
+  constructor(call: RetrieveDustCall) {
+    this._call = call;
   }
 }
 
@@ -550,5 +767,91 @@ export class ScheduleCallOrderParams_Struct extends ethereum.Tuple {
 
   get maxFeeAmount(): BigInt {
     return this[9].toBigInt();
+  }
+}
+
+export class SetDurationCall extends ethereum.Call {
+  get inputs(): SetDurationCall__Inputs {
+    return new SetDurationCall__Inputs(this);
+  }
+
+  get outputs(): SetDurationCall__Outputs {
+    return new SetDurationCall__Outputs(this);
+  }
+}
+
+export class SetDurationCall__Inputs {
+  _call: SetDurationCall;
+
+  constructor(call: SetDurationCall) {
+    this._call = call;
+  }
+
+  get duration_(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetDurationCall__Outputs {
+  _call: SetDurationCall;
+
+  constructor(call: SetDurationCall) {
+    this._call = call;
+  }
+}
+
+export class SetMinimumFeeCall extends ethereum.Call {
+  get inputs(): SetMinimumFeeCall__Inputs {
+    return new SetMinimumFeeCall__Inputs(this);
+  }
+
+  get outputs(): SetMinimumFeeCall__Outputs {
+    return new SetMinimumFeeCall__Outputs(this);
+  }
+}
+
+export class SetMinimumFeeCall__Inputs {
+  _call: SetMinimumFeeCall;
+
+  constructor(call: SetMinimumFeeCall) {
+    this._call = call;
+  }
+
+  get minimumFee_(): BigInt {
+    return this._call.inputValues[0].value.toBigInt();
+  }
+}
+
+export class SetMinimumFeeCall__Outputs {
+  _call: SetMinimumFeeCall;
+
+  constructor(call: SetMinimumFeeCall) {
+    this._call = call;
+  }
+}
+
+export class UnpauseCall extends ethereum.Call {
+  get inputs(): UnpauseCall__Inputs {
+    return new UnpauseCall__Inputs(this);
+  }
+
+  get outputs(): UnpauseCall__Outputs {
+    return new UnpauseCall__Outputs(this);
+  }
+}
+
+export class UnpauseCall__Inputs {
+  _call: UnpauseCall;
+
+  constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UnpauseCall__Outputs {
+  _call: UnpauseCall;
+
+  constructor(call: UnpauseCall) {
+    this._call = call;
   }
 }

@@ -95,6 +95,24 @@ export class RangeOrder extends Entity {
     this.set("ejectDust", Value.fromBoolean(value));
   }
 
+  get startTime(): BigInt {
+    let value = this.get("startTime");
+    return value.toBigInt();
+  }
+
+  set startTime(value: BigInt) {
+    this.set("startTime", Value.fromBigInt(value));
+  }
+
+  get expiryTime(): BigInt {
+    let value = this.get("expiryTime");
+    return value.toBigInt();
+  }
+
+  set expiryTime(value: BigInt) {
+    this.set("expiryTime", Value.fromBigInt(value));
+  }
+
   get amountIn(): BigInt | null {
     let value = this.get("amountIn");
     if (value === null || value.kind == ValueKind.NULL) {

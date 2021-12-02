@@ -1,6 +1,6 @@
 import { log, BigInt } from "@graphprotocol/graph-ts";
 import { RangeOrder } from "../../generated/schema";
-import {LogSetEject, LogEject, LogCancelEject} from "../../generated/EjectLP/EjectLP";
+import {EjectLP, LogSetEject, LogEject, LogCancelEject} from "../../generated/EjectLP/EjectLP";
 
 export function handleSetEjectLP(event: LogSetEject): void {
   let entity = RangeOrder.load(event.params.tokenId.toString());
@@ -10,6 +10,8 @@ export function handleSetEjectLP(event: LogSetEject): void {
   } else {
     entity = new RangeOrder(event.params.tokenId.toString());
   }
+
+  let ejectLP = EjectLP.bind(event.address);
 
   entity.status = "submitted";
   entity.submittedTxHash = event.transaction.hash;
@@ -27,6 +29,8 @@ export function handleSetEjectLP(event: LogSetEject): void {
   entity.receiver = event.params.orderParams.receiver.toHexString();
   entity.feeToken = event.params.orderParams.feeToken.toHexString();
   entity.resolver = event.params.orderParams.resolver.toHexString();
+  entity.startTime = event.params.startTime;
+  entity.expiryTime = entity.startTime.plus(ejectLP.duration());
   entity.maxFeeAmount = event.params.orderParams.maxFeeAmount;
 
   entity.save();

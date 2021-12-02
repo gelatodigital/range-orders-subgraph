@@ -1,8 +1,7 @@
 {
-    "network": "goerli",
-    "rangeOrder": "0xC9A52451bff36122f02315670934fd429d04cC24",
-    "rangeOrderStartBlock": 5818798,
-    "ejectLP": "0x13ba9E988e11FF4Ee961Fb787Da428756908Cf52",
-    "ejectLPStartBlock": 5818791
-  }
-  
+  "network": "goerli",
+  "rangeOrder": "0xC9A52451bff36122f02315670934fd429d04cC24",
+  "rangeOrderStartBlock": 5818798,
+  "ejectLP": "0x13ba9E988e11FF4Ee961Fb787Da428756908Cf52",
+  "ejectLPStartBlock": 5818791
+}
