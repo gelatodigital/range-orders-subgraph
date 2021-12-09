@@ -160,6 +160,12 @@
         "internalType": "uint256",
         "name": "feeAmount",
         "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
       }
     ],
     "name": "LogEject",
@@ -190,21 +196,6 @@
             "internalType": "bool",
             "name": "ejectAbove",
             "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount0Min",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount1Min",
-            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -246,6 +237,43 @@
       }
     ],
     "name": "LogSetEject",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount0Out",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount1Out",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "feeAmount",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "address",
+        "name": "receiver",
+        "type": "address"
+      }
+    ],
+    "name": "LogSettle",
     "type": "event"
   },
   {
@@ -294,21 +322,6 @@
             "type": "bool"
           },
           {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount0Min",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount1Min",
-            "type": "uint256"
-          },
-          {
             "internalType": "address",
             "name": "receiver",
             "type": "address"
@@ -342,16 +355,6 @@
     "name": "canEject",
     "outputs": [
       {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
         "internalType": "uint128",
         "name": "",
         "type": "uint128"
@@ -378,21 +381,6 @@
             "internalType": "bool",
             "name": "ejectAbove",
             "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount0Min",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount1Min",
-            "type": "uint256"
           },
           {
             "internalType": "address",
@@ -458,21 +446,6 @@
             "type": "bool"
           },
           {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount0Min",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount1Min",
-            "type": "uint256"
-          },
-          {
             "internalType": "address",
             "name": "receiver",
             "type": "address"
@@ -496,11 +469,29 @@
         "internalType": "struct Order",
         "name": "order_",
         "type": "tuple"
+      },
+      {
+        "internalType": "bool",
+        "name": "isEjection_",
+        "type": "bool"
       }
     ],
-    "name": "eject",
+    "name": "ejectOrSettle",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [],
+    "name": "factory",
+    "outputs": [
+      {
+        "internalType": "address",
+        "name": "",
+        "type": "address"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -527,6 +518,143 @@
     "name": "initialize",
     "outputs": [],
     "stateMutability": "nonpayable",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "int24",
+            "name": "tickThreshold",
+            "type": "int24"
+          },
+          {
+            "internalType": "bool",
+            "name": "ejectAbove",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeeAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Order",
+        "name": "order_",
+        "type": "tuple"
+      },
+      {
+        "internalType": "address",
+        "name": "feeToken_",
+        "type": "address"
+      },
+      {
+        "internalType": "contract IUniswapV3Pool",
+        "name": "pool_",
+        "type": "address"
+      }
+    ],
+    "name": "isEjectable",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      {
+        "internalType": "uint256",
+        "name": "tokenId_",
+        "type": "uint256"
+      },
+      {
+        "components": [
+          {
+            "internalType": "int24",
+            "name": "tickThreshold",
+            "type": "int24"
+          },
+          {
+            "internalType": "bool",
+            "name": "ejectAbove",
+            "type": "bool"
+          },
+          {
+            "internalType": "address",
+            "name": "receiver",
+            "type": "address"
+          },
+          {
+            "internalType": "address",
+            "name": "owner",
+            "type": "address"
+          },
+          {
+            "internalType": "uint256",
+            "name": "maxFeeAmount",
+            "type": "uint256"
+          },
+          {
+            "internalType": "uint256",
+            "name": "startTime",
+            "type": "uint256"
+          }
+        ],
+        "internalType": "struct Order",
+        "name": "order_",
+        "type": "tuple"
+      },
+      {
+        "internalType": "address",
+        "name": "feeToken_",
+        "type": "address"
+      }
+    ],
+    "name": "isExpired",
+    "outputs": [
+      {
+        "internalType": "bool",
+        "name": "",
+        "type": "bool"
+      },
+      {
+        "internalType": "string",
+        "name": "",
+        "type": "string"
+      }
+    ],
+    "stateMutability": "view",
     "type": "function"
   },
   {
@@ -642,21 +770,6 @@
             "internalType": "bool",
             "name": "ejectAbove",
             "type": "bool"
-          },
-          {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount0Min",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amount1Min",
-            "type": "uint256"
           },
           {
             "internalType": "address",

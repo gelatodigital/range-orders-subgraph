@@ -21,12 +21,14 @@ dataSources:
         - name: EjectLP
           file: ./abis/EjectLP.json
       eventHandlers:
-        - event: LogSetEject(indexed uint256,(uint256,int24,bool,bool,uint256,uint256,address,address,address,uint256),uint256,address)
+        - event: LogSetEject(indexed uint256,(uint256,int24,bool,address,address,address,uint256),uint256,address)
           handler: handleSetEjectLP
-        - event: LogEject(indexed uint256,uint256,uint256,uint256)
+        - event: LogEject(indexed uint256,uint256,uint256,uint256,address)
           handler: handleEjectLP
         - event: LogCancelEject(indexed uint256)
           handler: handleCancel
+        - event: LogSettle(indexed uint256,uint256,uint256,uint256,address)
+          handler: handleSettlement
       file: ./src/mappings/ejectLPMapping.ts
   - kind: ethereum/contract
     name: RangeOrder
@@ -47,4 +49,6 @@ dataSources:
       eventHandlers:
         - event: LogSetRangeOrder(indexed uint256,address,uint256)
           handler: handleSetRangeOrder
+        - event: LogCancelRangeOrder(indexed uint256,uint256,uint256)
+          handler: handleCancelRangeOrder
       file: ./src/mappings/rangeOrderMapping.ts
