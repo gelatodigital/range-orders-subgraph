@@ -10,6 +10,76 @@ import {
   BigInt
 } from "@graphprotocol/graph-ts";
 
+export class OwnershipTransferred extends ethereum.Event {
+  get params(): OwnershipTransferred__Params {
+    return new OwnershipTransferred__Params(this);
+  }
+}
+
+export class OwnershipTransferred__Params {
+  _event: OwnershipTransferred;
+
+  constructor(event: OwnershipTransferred) {
+    this._event = event;
+  }
+
+  get previousOwner(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newOwner(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class ProxyImplementationUpdated extends ethereum.Event {
+  get params(): ProxyImplementationUpdated__Params {
+    return new ProxyImplementationUpdated__Params(this);
+  }
+}
+
+export class ProxyImplementationUpdated__Params {
+  _event: ProxyImplementationUpdated;
+
+  constructor(event: ProxyImplementationUpdated) {
+    this._event = event;
+  }
+
+  get previousImplementation(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+
+  get newImplementation(): Address {
+    return this._event.parameters[1].value.toAddress();
+  }
+}
+
+export class LogCancelRangeOrder extends ethereum.Event {
+  get params(): LogCancelRangeOrder__Params {
+    return new LogCancelRangeOrder__Params(this);
+  }
+}
+
+export class LogCancelRangeOrder__Params {
+  _event: LogCancelRangeOrder;
+
+  constructor(event: LogCancelRangeOrder) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get amount0(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get amount1(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class LogSetRangeOrder extends ethereum.Event {
   get params(): LogSetRangeOrder__Params {
     return new LogSetRangeOrder__Params(this);
@@ -36,9 +106,83 @@ export class LogSetRangeOrder__Params {
   }
 }
 
+export class Paused extends ethereum.Event {
+  get params(): Paused__Params {
+    return new Paused__Params(this);
+  }
+}
+
+export class Paused__Params {
+  _event: Paused;
+
+  constructor(event: Paused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
+export class Unpaused extends ethereum.Event {
+  get params(): Unpaused__Params {
+    return new Unpaused__Params(this);
+  }
+}
+
+export class Unpaused__Params {
+  _event: Unpaused;
+
+  constructor(event: Unpaused) {
+    this._event = event;
+  }
+
+  get account(): Address {
+    return this._event.parameters[0].value.toAddress();
+  }
+}
+
 export class RangeOrder extends ethereum.SmartContract {
   static bind(address: Address): RangeOrder {
     return new RangeOrder("RangeOrder", address);
+  }
+
+  owner(): Address {
+    let result = super.call("owner", "owner():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_owner(): ethereum.CallResult<Address> {
+    let result = super.tryCall("owner", "owner():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
+  }
+
+  supportsInterface(id: Bytes): boolean {
+    let result = super.call(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(id)]
+    );
+
+    return result[0].toBoolean();
+  }
+
+  try_supportsInterface(id: Bytes): ethereum.CallResult<boolean> {
+    let result = super.tryCall(
+      "supportsInterface",
+      "supportsInterface(bytes4):(bool)",
+      [ethereum.Value.fromFixedBytes(id)]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
   }
 
   WETH9(): Address {
@@ -114,6 +258,21 @@ export class RangeOrder extends ethereum.SmartContract {
     return ethereum.CallResult.fromValue(value[0].toBytes());
   }
 
+  paused(): boolean {
+    let result = super.call("paused", "paused():(bool)", []);
+
+    return result[0].toBoolean();
+  }
+
+  try_paused(): ethereum.CallResult<boolean> {
+    let result = super.tryCall("paused", "paused():(bool)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toBoolean());
+  }
+
   rangeOrderResolver(): Address {
     let result = super.call(
       "rangeOrderResolver",
@@ -138,40 +297,122 @@ export class RangeOrder extends ethereum.SmartContract {
   }
 }
 
-export class ConstructorCall extends ethereum.Call {
-  get inputs(): ConstructorCall__Inputs {
-    return new ConstructorCall__Inputs(this);
+export class DefaultCall extends ethereum.Call {
+  get inputs(): DefaultCall__Inputs {
+    return new DefaultCall__Inputs(this);
   }
 
-  get outputs(): ConstructorCall__Outputs {
-    return new ConstructorCall__Outputs(this);
+  get outputs(): DefaultCall__Outputs {
+    return new DefaultCall__Outputs(this);
   }
 }
 
-export class ConstructorCall__Inputs {
-  _call: ConstructorCall;
+export class DefaultCall__Inputs {
+  _call: DefaultCall;
 
-  constructor(call: ConstructorCall) {
+  constructor(call: DefaultCall) {
+    this._call = call;
+  }
+}
+
+export class DefaultCall__Outputs {
+  _call: DefaultCall;
+
+  constructor(call: DefaultCall) {
+    this._call = call;
+  }
+}
+
+export class TransferOwnershipCall extends ethereum.Call {
+  get inputs(): TransferOwnershipCall__Inputs {
+    return new TransferOwnershipCall__Inputs(this);
+  }
+
+  get outputs(): TransferOwnershipCall__Outputs {
+    return new TransferOwnershipCall__Outputs(this);
+  }
+}
+
+export class TransferOwnershipCall__Inputs {
+  _call: TransferOwnershipCall;
+
+  constructor(call: TransferOwnershipCall) {
     this._call = call;
   }
 
-  get eject_(): Address {
+  get newOwner(): Address {
     return this._call.inputValues[0].value.toAddress();
-  }
-
-  get WETH9_(): Address {
-    return this._call.inputValues[1].value.toAddress();
-  }
-
-  get rangeOrderResolver_(): Address {
-    return this._call.inputValues[2].value.toAddress();
   }
 }
 
-export class ConstructorCall__Outputs {
-  _call: ConstructorCall;
+export class TransferOwnershipCall__Outputs {
+  _call: TransferOwnershipCall;
 
-  constructor(call: ConstructorCall) {
+  constructor(call: TransferOwnershipCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeToCall extends ethereum.Call {
+  get inputs(): UpgradeToCall__Inputs {
+    return new UpgradeToCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeToCall__Outputs {
+    return new UpgradeToCall__Outputs(this);
+  }
+}
+
+export class UpgradeToCall__Inputs {
+  _call: UpgradeToCall;
+
+  constructor(call: UpgradeToCall) {
+    this._call = call;
+  }
+
+  get newImplementation(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+}
+
+export class UpgradeToCall__Outputs {
+  _call: UpgradeToCall;
+
+  constructor(call: UpgradeToCall) {
+    this._call = call;
+  }
+}
+
+export class UpgradeToAndCallCall extends ethereum.Call {
+  get inputs(): UpgradeToAndCallCall__Inputs {
+    return new UpgradeToAndCallCall__Inputs(this);
+  }
+
+  get outputs(): UpgradeToAndCallCall__Outputs {
+    return new UpgradeToAndCallCall__Outputs(this);
+  }
+}
+
+export class UpgradeToAndCallCall__Inputs {
+  _call: UpgradeToAndCallCall;
+
+  constructor(call: UpgradeToAndCallCall) {
+    this._call = call;
+  }
+
+  get newImplementation(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[1].value.toBytes();
+  }
+}
+
+export class UpgradeToAndCallCall__Outputs {
+  _call: UpgradeToAndCallCall;
+
+  constructor(call: UpgradeToAndCallCall) {
     this._call = call;
   }
 }
@@ -200,6 +441,10 @@ export class CancelRangeOrderCall__Inputs {
   get params_(): CancelRangeOrderCallParams_Struct {
     return this._call.inputValues[1].value.toTuple() as CancelRangeOrderCallParams_Struct;
   }
+
+  get startTime_(): BigInt {
+    return this._call.inputValues[2].value.toBigInt();
+  }
 }
 
 export class CancelRangeOrderCall__Outputs {
@@ -219,28 +464,72 @@ export class CancelRangeOrderCallParams_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
   get tickThreshold(): i32 {
-    return this[3].toI32();
+    return this[2].toI32();
   }
 
   get amountIn(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get minAmountOut(): BigInt {
-    return this[5].toBigInt();
+    return this[3].toBigInt();
   }
 
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[4].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[5].toBigInt();
+  }
+}
+
+export class InitializeCall extends ethereum.Call {
+  get inputs(): InitializeCall__Inputs {
+    return new InitializeCall__Inputs(this);
+  }
+
+  get outputs(): InitializeCall__Outputs {
+    return new InitializeCall__Outputs(this);
+  }
+}
+
+export class InitializeCall__Inputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class InitializeCall__Outputs {
+  _call: InitializeCall;
+
+  constructor(call: InitializeCall) {
+    this._call = call;
+  }
+}
+
+export class PauseCall extends ethereum.Call {
+  get inputs(): PauseCall__Inputs {
+    return new PauseCall__Inputs(this);
+  }
+
+  get outputs(): PauseCall__Outputs {
+    return new PauseCall__Outputs(this);
+  }
+}
+
+export class PauseCall__Inputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
+  }
+}
+
+export class PauseCall__Outputs {
+  _call: PauseCall;
+
+  constructor(call: PauseCall) {
+    this._call = call;
   }
 }
 
@@ -283,27 +572,83 @@ export class SetRangeOrderCallParams_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
   get tickThreshold(): i32 {
-    return this[3].toI32();
+    return this[2].toI32();
   }
 
   get amountIn(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get minAmountOut(): BigInt {
-    return this[5].toBigInt();
+    return this[3].toBigInt();
   }
 
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[4].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[5].toBigInt();
+  }
+}
+
+export class UnpauseCall extends ethereum.Call {
+  get inputs(): UnpauseCall__Inputs {
+    return new UnpauseCall__Inputs(this);
+  }
+
+  get outputs(): UnpauseCall__Outputs {
+    return new UnpauseCall__Outputs(this);
+  }
+}
+
+export class UnpauseCall__Inputs {
+  _call: UnpauseCall;
+
+  constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class UnpauseCall__Outputs {
+  _call: UnpauseCall;
+
+  constructor(call: UnpauseCall) {
+    this._call = call;
+  }
+}
+
+export class ConstructorCall extends ethereum.Call {
+  get inputs(): ConstructorCall__Inputs {
+    return new ConstructorCall__Inputs(this);
+  }
+
+  get outputs(): ConstructorCall__Outputs {
+    return new ConstructorCall__Outputs(this);
+  }
+}
+
+export class ConstructorCall__Inputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
+  }
+
+  get implementationAddress(): Address {
+    return this._call.inputValues[0].value.toAddress();
+  }
+
+  get ownerAddress(): Address {
+    return this._call.inputValues[1].value.toAddress();
+  }
+
+  get data(): Bytes {
+    return this._call.inputValues[2].value.toBytes();
+  }
+}
+
+export class ConstructorCall__Outputs {
+  _call: ConstructorCall;
+
+  constructor(call: ConstructorCall) {
+    this._call = call;
   }
 }

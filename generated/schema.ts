@@ -86,13 +86,22 @@ export class RangeOrder extends Entity {
     this.set("zeroForOne", Value.fromBoolean(value));
   }
 
-  get ejectDust(): boolean {
-    let value = this.get("ejectDust");
-    return value.toBoolean();
+  get startTime(): BigInt {
+    let value = this.get("startTime");
+    return value.toBigInt();
   }
 
-  set ejectDust(value: boolean) {
-    this.set("ejectDust", Value.fromBoolean(value));
+  set startTime(value: BigInt) {
+    this.set("startTime", Value.fromBigInt(value));
+  }
+
+  get expiryTime(): BigInt {
+    let value = this.get("expiryTime");
+    return value.toBigInt();
+  }
+
+  set expiryTime(value: BigInt) {
+    this.set("expiryTime", Value.fromBigInt(value));
   }
 
   get amountIn(): BigInt | null {
@@ -109,40 +118,6 @@ export class RangeOrder extends Entity {
       this.unset("amountIn");
     } else {
       this.set("amountIn", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get amount0Min(): BigInt | null {
-    let value = this.get("amount0Min");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set amount0Min(value: BigInt | null) {
-    if (value === null) {
-      this.unset("amount0Min");
-    } else {
-      this.set("amount0Min", Value.fromBigInt(value as BigInt));
-    }
-  }
-
-  get amount1Min(): BigInt | null {
-    let value = this.get("amount1Min");
-    if (value === null || value.kind == ValueKind.NULL) {
-      return null;
-    } else {
-      return value.toBigInt();
-    }
-  }
-
-  set amount1Min(value: BigInt | null) {
-    if (value === null) {
-      this.unset("amount1Min");
-    } else {
-      this.set("amount1Min", Value.fromBigInt(value as BigInt));
     }
   }
 

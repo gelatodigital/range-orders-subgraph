@@ -4,10 +4,9 @@ type RangeOrder @entity {
   creator: String
   tickThreshold: BigInt!
   zeroForOne: Boolean!
-  ejectDust: Boolean!
+  startTime: BigInt!
+  expiryTime: BigInt!
   amountIn: BigInt
-  amount0Min: BigInt
-  amount1Min: BigInt
   receiver: String!
   feeToken: String!
   resolver: String!
@@ -29,5 +28,6 @@ type RangeOrder @entity {
 enum RangeOrderStatus @entity {
   submitted
   executed
+  expired
   cancelled
 }
