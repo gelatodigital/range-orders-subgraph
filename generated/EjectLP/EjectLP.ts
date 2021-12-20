@@ -100,6 +100,10 @@ export class LogEject__Params {
   get feeAmount(): BigInt {
     return this._event.parameters[3].value.toBigInt();
   }
+
+  get receiver(): Address {
+    return this._event.parameters[4].value.toAddress();
+  }
 }
 
 export class LogSetEject extends ethereum.Event {
@@ -145,32 +149,54 @@ export class LogSetEjectOrderParamsStruct extends ethereum.Tuple {
     return this[2].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[3].toBoolean();
-  }
-
-  get amount0Min(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get amount1Min(): BigInt {
-    return this[5].toBigInt();
-  }
-
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[3].toAddress();
   }
 
   get feeToken(): Address {
-    return this[7].toAddress();
+    return this[4].toAddress();
   }
 
   get resolver(): Address {
-    return this[8].toAddress();
+    return this[5].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[9].toBigInt();
+    return this[6].toBigInt();
+  }
+}
+
+export class LogSettle extends ethereum.Event {
+  get params(): LogSettle__Params {
+    return new LogSettle__Params(this);
+  }
+}
+
+export class LogSettle__Params {
+  _event: LogSettle;
+
+  constructor(event: LogSettle) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get amount0Out(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get amount1Out(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+
+  get feeAmount(): BigInt {
+    return this._event.parameters[3].value.toBigInt();
+  }
+
+  get receiver(): Address {
+    return this._event.parameters[4].value.toAddress();
   }
 }
 
@@ -210,26 +236,6 @@ export class Unpaused__Params {
   }
 }
 
-export class EjectLP__canEjectResult {
-  value0: Address;
-  value1: Address;
-  value2: BigInt;
-
-  constructor(value0: Address, value1: Address, value2: BigInt) {
-    this.value0 = value0;
-    this.value1 = value1;
-    this.value2 = value2;
-  }
-
-  toMap(): TypedMap<string, ethereum.Value> {
-    let map = new TypedMap<string, ethereum.Value>();
-    map.set("value0", ethereum.Value.fromAddress(this.value0));
-    map.set("value1", ethereum.Value.fromAddress(this.value1));
-    map.set("value2", ethereum.Value.fromUnsignedBigInt(this.value2));
-    return map;
-  }
-}
-
 export class EjectLP__canEjectInputOrder_Struct extends ethereum.Tuple {
   get tickThreshold(): i32 {
     return this[0].toI32();
@@ -239,32 +245,106 @@ export class EjectLP__canEjectInputOrder_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
-  get amount0Min(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get amount1Min(): BigInt {
-    return this[4].toBigInt();
-  }
-
   get receiver(): Address {
-    return this[5].toAddress();
+    return this[2].toAddress();
   }
 
   get owner(): Address {
-    return this[6].toAddress();
+    return this[3].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[4].toBigInt();
   }
 
   get startTime(): BigInt {
-    return this[8].toBigInt();
+    return this[5].toBigInt();
+  }
+}
+
+export class EjectLP__isEjectableResult {
+  value0: boolean;
+  value1: string;
+
+  constructor(value0: boolean, value1: string) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromBoolean(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    return map;
+  }
+}
+
+export class EjectLP__isEjectableInputOrder_Struct extends ethereum.Tuple {
+  get tickThreshold(): i32 {
+    return this[0].toI32();
+  }
+
+  get ejectAbove(): boolean {
+    return this[1].toBoolean();
+  }
+
+  get receiver(): Address {
+    return this[2].toAddress();
+  }
+
+  get owner(): Address {
+    return this[3].toAddress();
+  }
+
+  get maxFeeAmount(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get startTime(): BigInt {
+    return this[5].toBigInt();
+  }
+}
+
+export class EjectLP__isExpiredResult {
+  value0: boolean;
+  value1: string;
+
+  constructor(value0: boolean, value1: string) {
+    this.value0 = value0;
+    this.value1 = value1;
+  }
+
+  toMap(): TypedMap<string, ethereum.Value> {
+    let map = new TypedMap<string, ethereum.Value>();
+    map.set("value0", ethereum.Value.fromBoolean(this.value0));
+    map.set("value1", ethereum.Value.fromString(this.value1));
+    return map;
+  }
+}
+
+export class EjectLP__isExpiredInputOrder_Struct extends ethereum.Tuple {
+  get tickThreshold(): i32 {
+    return this[0].toI32();
+  }
+
+  get ejectAbove(): boolean {
+    return this[1].toBoolean();
+  }
+
+  get receiver(): Address {
+    return this[2].toAddress();
+  }
+
+  get owner(): Address {
+    return this[3].toAddress();
+  }
+
+  get maxFeeAmount(): BigInt {
+    return this[4].toBigInt();
+  }
+
+  get startTime(): BigInt {
+    return this[5].toBigInt();
   }
 }
 
@@ -315,10 +395,10 @@ export class EjectLP extends ethereum.SmartContract {
     tokenId_: BigInt,
     order_: EjectLP__canEjectInputOrder_Struct,
     feeToken_: Address
-  ): EjectLP__canEjectResult {
+  ): BigInt {
     let result = super.call(
       "canEject",
-      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256,uint256),address):(address,address,uint128)",
+      "canEject(uint256,(int24,bool,address,address,uint256,uint256),address):(uint128)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId_),
         ethereum.Value.fromTuple(order_),
@@ -326,21 +406,17 @@ export class EjectLP extends ethereum.SmartContract {
       ]
     );
 
-    return new EjectLP__canEjectResult(
-      result[0].toAddress(),
-      result[1].toAddress(),
-      result[2].toBigInt()
-    );
+    return result[0].toBigInt();
   }
 
   try_canEject(
     tokenId_: BigInt,
     order_: EjectLP__canEjectInputOrder_Struct,
     feeToken_: Address
-  ): ethereum.CallResult<EjectLP__canEjectResult> {
+  ): ethereum.CallResult<BigInt> {
     let result = super.tryCall(
       "canEject",
-      "canEject(uint256,(int24,bool,bool,uint256,uint256,address,address,uint256,uint256),address):(address,address,uint128)",
+      "canEject(uint256,(int24,bool,address,address,uint256,uint256),address):(uint128)",
       [
         ethereum.Value.fromUnsignedBigInt(tokenId_),
         ethereum.Value.fromTuple(order_),
@@ -351,13 +427,7 @@ export class EjectLP extends ethereum.SmartContract {
       return new ethereum.CallResult();
     }
     let value = result.value;
-    return ethereum.CallResult.fromValue(
-      new EjectLP__canEjectResult(
-        value[0].toAddress(),
-        value[1].toAddress(),
-        value[2].toBigInt()
-      )
-    );
+    return ethereum.CallResult.fromValue(value[0].toBigInt());
   }
 
   duration(): BigInt {
@@ -373,6 +443,21 @@ export class EjectLP extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBigInt());
+  }
+
+  factory(): Address {
+    let result = super.call("factory", "factory():(address)", []);
+
+    return result[0].toAddress();
+  }
+
+  try_factory(): ethereum.CallResult<Address> {
+    let result = super.tryCall("factory", "factory():(address)", []);
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(value[0].toAddress());
   }
 
   hashById(param0: BigInt): Bytes {
@@ -392,6 +477,98 @@ export class EjectLP extends ethereum.SmartContract {
     }
     let value = result.value;
     return ethereum.CallResult.fromValue(value[0].toBytes());
+  }
+
+  isEjectable(
+    tokenId_: BigInt,
+    order_: EjectLP__isEjectableInputOrder_Struct,
+    feeToken_: Address,
+    pool_: Address
+  ): EjectLP__isEjectableResult {
+    let result = super.call(
+      "isEjectable",
+      "isEjectable(uint256,(int24,bool,address,address,uint256,uint256),address,address):(bool,string)",
+      [
+        ethereum.Value.fromUnsignedBigInt(tokenId_),
+        ethereum.Value.fromTuple(order_),
+        ethereum.Value.fromAddress(feeToken_),
+        ethereum.Value.fromAddress(pool_)
+      ]
+    );
+
+    return new EjectLP__isEjectableResult(
+      result[0].toBoolean(),
+      result[1].toString()
+    );
+  }
+
+  try_isEjectable(
+    tokenId_: BigInt,
+    order_: EjectLP__isEjectableInputOrder_Struct,
+    feeToken_: Address,
+    pool_: Address
+  ): ethereum.CallResult<EjectLP__isEjectableResult> {
+    let result = super.tryCall(
+      "isEjectable",
+      "isEjectable(uint256,(int24,bool,address,address,uint256,uint256),address,address):(bool,string)",
+      [
+        ethereum.Value.fromUnsignedBigInt(tokenId_),
+        ethereum.Value.fromTuple(order_),
+        ethereum.Value.fromAddress(feeToken_),
+        ethereum.Value.fromAddress(pool_)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new EjectLP__isEjectableResult(value[0].toBoolean(), value[1].toString())
+    );
+  }
+
+  isExpired(
+    tokenId_: BigInt,
+    order_: EjectLP__isExpiredInputOrder_Struct,
+    feeToken_: Address
+  ): EjectLP__isExpiredResult {
+    let result = super.call(
+      "isExpired",
+      "isExpired(uint256,(int24,bool,address,address,uint256,uint256),address):(bool,string)",
+      [
+        ethereum.Value.fromUnsignedBigInt(tokenId_),
+        ethereum.Value.fromTuple(order_),
+        ethereum.Value.fromAddress(feeToken_)
+      ]
+    );
+
+    return new EjectLP__isExpiredResult(
+      result[0].toBoolean(),
+      result[1].toString()
+    );
+  }
+
+  try_isExpired(
+    tokenId_: BigInt,
+    order_: EjectLP__isExpiredInputOrder_Struct,
+    feeToken_: Address
+  ): ethereum.CallResult<EjectLP__isExpiredResult> {
+    let result = super.tryCall(
+      "isExpired",
+      "isExpired(uint256,(int24,bool,address,address,uint256,uint256),address):(bool,string)",
+      [
+        ethereum.Value.fromUnsignedBigInt(tokenId_),
+        ethereum.Value.fromTuple(order_),
+        ethereum.Value.fromAddress(feeToken_)
+      ]
+    );
+    if (result.reverted) {
+      return new ethereum.CallResult();
+    }
+    let value = result.value;
+    return ethereum.CallResult.fromValue(
+      new EjectLP__isExpiredResult(value[0].toBoolean(), value[1].toString())
+    );
   }
 
   minimumFee(): BigInt {
@@ -637,49 +814,37 @@ export class CancelCallOrder_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
-  get amount0Min(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get amount1Min(): BigInt {
-    return this[4].toBigInt();
-  }
-
   get receiver(): Address {
-    return this[5].toAddress();
+    return this[2].toAddress();
   }
 
   get owner(): Address {
-    return this[6].toAddress();
+    return this[3].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[4].toBigInt();
   }
 
   get startTime(): BigInt {
-    return this[8].toBigInt();
+    return this[5].toBigInt();
   }
 }
 
-export class EjectCall extends ethereum.Call {
-  get inputs(): EjectCall__Inputs {
-    return new EjectCall__Inputs(this);
+export class EjectOrSettleCall extends ethereum.Call {
+  get inputs(): EjectOrSettleCall__Inputs {
+    return new EjectOrSettleCall__Inputs(this);
   }
 
-  get outputs(): EjectCall__Outputs {
-    return new EjectCall__Outputs(this);
+  get outputs(): EjectOrSettleCall__Outputs {
+    return new EjectOrSettleCall__Outputs(this);
   }
 }
 
-export class EjectCall__Inputs {
-  _call: EjectCall;
+export class EjectOrSettleCall__Inputs {
+  _call: EjectOrSettleCall;
 
-  constructor(call: EjectCall) {
+  constructor(call: EjectOrSettleCall) {
     this._call = call;
   }
 
@@ -687,20 +852,24 @@ export class EjectCall__Inputs {
     return this._call.inputValues[0].value.toBigInt();
   }
 
-  get order_(): EjectCallOrder_Struct {
-    return this._call.inputValues[1].value.toTuple() as EjectCallOrder_Struct;
+  get order_(): EjectOrSettleCallOrder_Struct {
+    return this._call.inputValues[1].value.toTuple() as EjectOrSettleCallOrder_Struct;
+  }
+
+  get isEjection_(): boolean {
+    return this._call.inputValues[2].value.toBoolean();
   }
 }
 
-export class EjectCall__Outputs {
-  _call: EjectCall;
+export class EjectOrSettleCall__Outputs {
+  _call: EjectOrSettleCall;
 
-  constructor(call: EjectCall) {
+  constructor(call: EjectOrSettleCall) {
     this._call = call;
   }
 }
 
-export class EjectCallOrder_Struct extends ethereum.Tuple {
+export class EjectOrSettleCallOrder_Struct extends ethereum.Tuple {
   get tickThreshold(): i32 {
     return this[0].toI32();
   }
@@ -709,32 +878,20 @@ export class EjectCallOrder_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
-  get amount0Min(): BigInt {
-    return this[3].toBigInt();
-  }
-
-  get amount1Min(): BigInt {
-    return this[4].toBigInt();
-  }
-
   get receiver(): Address {
-    return this[5].toAddress();
+    return this[2].toAddress();
   }
 
   get owner(): Address {
-    return this[6].toAddress();
+    return this[3].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[4].toBigInt();
   }
 
   get startTime(): BigInt {
-    return this[8].toBigInt();
+    return this[5].toBigInt();
   }
 }
 
@@ -901,32 +1058,20 @@ export class ScheduleCallOrderParams_Struct extends ethereum.Tuple {
     return this[2].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[3].toBoolean();
-  }
-
-  get amount0Min(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get amount1Min(): BigInt {
-    return this[5].toBigInt();
-  }
-
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[3].toAddress();
   }
 
   get feeToken(): Address {
-    return this[7].toAddress();
+    return this[4].toAddress();
   }
 
   get resolver(): Address {
-    return this[8].toAddress();
+    return this[5].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[9].toBigInt();
+    return this[6].toBigInt();
   }
 }
 

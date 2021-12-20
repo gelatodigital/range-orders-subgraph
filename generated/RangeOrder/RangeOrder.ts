@@ -54,6 +54,32 @@ export class ProxyImplementationUpdated__Params {
   }
 }
 
+export class LogCancelRangeOrder extends ethereum.Event {
+  get params(): LogCancelRangeOrder__Params {
+    return new LogCancelRangeOrder__Params(this);
+  }
+}
+
+export class LogCancelRangeOrder__Params {
+  _event: LogCancelRangeOrder;
+
+  constructor(event: LogCancelRangeOrder) {
+    this._event = event;
+  }
+
+  get tokenId(): BigInt {
+    return this._event.parameters[0].value.toBigInt();
+  }
+
+  get amount0(): BigInt {
+    return this._event.parameters[1].value.toBigInt();
+  }
+
+  get amount1(): BigInt {
+    return this._event.parameters[2].value.toBigInt();
+  }
+}
+
 export class LogSetRangeOrder extends ethereum.Event {
   get params(): LogSetRangeOrder__Params {
     return new LogSetRangeOrder__Params(this);
@@ -438,28 +464,20 @@ export class CancelRangeOrderCallParams_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
   get tickThreshold(): i32 {
-    return this[3].toI32();
+    return this[2].toI32();
   }
 
   get amountIn(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get minAmountOut(): BigInt {
-    return this[5].toBigInt();
+    return this[3].toBigInt();
   }
 
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[4].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[5].toBigInt();
   }
 }
 
@@ -554,28 +572,20 @@ export class SetRangeOrderCallParams_Struct extends ethereum.Tuple {
     return this[1].toBoolean();
   }
 
-  get ejectDust(): boolean {
-    return this[2].toBoolean();
-  }
-
   get tickThreshold(): i32 {
-    return this[3].toI32();
+    return this[2].toI32();
   }
 
   get amountIn(): BigInt {
-    return this[4].toBigInt();
-  }
-
-  get minAmountOut(): BigInt {
-    return this[5].toBigInt();
+    return this[3].toBigInt();
   }
 
   get receiver(): Address {
-    return this[6].toAddress();
+    return this[4].toAddress();
   }
 
   get maxFeeAmount(): BigInt {
-    return this[7].toBigInt();
+    return this[5].toBigInt();
   }
 }
 

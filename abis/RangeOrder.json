@@ -132,6 +132,31 @@
       },
       {
         "indexed": false,
+        "internalType": "uint256",
+        "name": "amount0",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
+        "internalType": "uint256",
+        "name": "amount1",
+        "type": "uint256"
+      }
+    ],
+    "name": "LogCancelRangeOrder",
+    "type": "event"
+  },
+  {
+    "anonymous": false,
+    "inputs": [
+      {
+        "indexed": true,
+        "internalType": "uint256",
+        "name": "tokenId",
+        "type": "uint256"
+      },
+      {
+        "indexed": false,
         "internalType": "address",
         "name": "pool",
         "type": "address"
@@ -205,11 +230,6 @@
             "type": "bool"
           },
           {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
             "internalType": "int24",
             "name": "tickThreshold",
             "type": "int24"
@@ -217,11 +237,6 @@
           {
             "internalType": "uint256",
             "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minAmountOut",
             "type": "uint256"
           },
           {
@@ -352,11 +367,6 @@
             "type": "bool"
           },
           {
-            "internalType": "bool",
-            "name": "ejectDust",
-            "type": "bool"
-          },
-          {
             "internalType": "int24",
             "name": "tickThreshold",
             "type": "int24"
@@ -364,11 +374,6 @@
           {
             "internalType": "uint256",
             "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "uint256",
-            "name": "minAmountOut",
             "type": "uint256"
           },
           {
