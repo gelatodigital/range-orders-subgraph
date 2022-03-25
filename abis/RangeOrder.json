@@ -1,125 +1,29 @@
 [
   {
-    "anonymous": false,
     "inputs": [
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousOwner",
+        "internalType": "contract INonfungiblePositionManager",
+        "name": "nftPositionManager_",
         "type": "address"
       },
       {
-        "indexed": true,
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "OwnershipTransferred",
-    "type": "event"
-  },
-  {
-    "anonymous": false,
-    "inputs": [
-      {
-        "indexed": true,
-        "internalType": "address",
-        "name": "previousImplementation",
+        "internalType": "contract IEjectLP",
+        "name": "eject_",
         "type": "address"
       },
       {
-        "indexed": true,
+        "internalType": "contract IWETH9",
+        "name": "WETH9_",
+        "type": "address"
+      },
+      {
         "internalType": "address",
-        "name": "newImplementation",
+        "name": "rangeOrderResolver_",
         "type": "address"
       }
     ],
-    "name": "ProxyImplementationUpdated",
-    "type": "event"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "fallback"
-  },
-  {
-    "inputs": [],
-    "name": "owner",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "bytes4",
-        "name": "id",
-        "type": "bytes4"
-      }
-    ],
-    "name": "supportsInterface",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
-    "stateMutability": "view",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newOwner",
-        "type": "address"
-      }
-    ],
-    "name": "transferOwnership",
-    "outputs": [],
     "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
-      }
-    ],
-    "name": "upgradeTo",
-    "outputs": [],
-    "stateMutability": "nonpayable",
-    "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "newImplementation",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "name": "upgradeToAndCall",
-    "outputs": [],
-    "stateMutability": "payable",
-    "type": "function"
-  },
-  {
-    "stateMutability": "payable",
-    "type": "receive"
+    "type": "constructor"
   },
   {
     "anonymous": false,
@@ -201,22 +105,14 @@
     "inputs": [],
     "name": "WETH9",
     "outputs": [
-      {
-        "internalType": "contract IWETH9",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "contract IWETH9", "name": "", "type": "address" }
     ],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [
-      {
-        "internalType": "uint256",
-        "name": "tokenId_",
-        "type": "uint256"
-      },
+      { "internalType": "uint256", "name": "tokenId_", "type": "uint256" },
       {
         "components": [
           {
@@ -224,23 +120,11 @@
             "name": "pool",
             "type": "address"
           },
+          { "internalType": "bool", "name": "zeroForOne", "type": "bool" },
+          { "internalType": "int24", "name": "tickThreshold", "type": "int24" },
+          { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
           {
-            "internalType": "bool",
-            "name": "zeroForOne",
-            "type": "bool"
-          },
-          {
-            "internalType": "int24",
-            "name": "tickThreshold",
-            "type": "int24"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
+            "internalType": "address payable",
             "name": "receiver",
             "type": "address"
           },
@@ -254,11 +138,7 @@
         "name": "params_",
         "type": "tuple"
       },
-      {
-        "internalType": "uint256",
-        "name": "startTime_",
-        "type": "uint256"
-      }
+      { "internalType": "uint256", "name": "startTime_", "type": "uint256" }
     ],
     "name": "cancelRangeOrder",
     "outputs": [],
@@ -269,11 +149,7 @@
     "inputs": [],
     "name": "eject",
     "outputs": [
-      {
-        "internalType": "contract IEjectLP",
-        "name": "",
-        "type": "address"
-      }
+      { "internalType": "contract IEjectLP", "name": "", "type": "address" }
     ],
     "stateMutability": "view",
     "type": "function"
@@ -286,36 +162,27 @@
     "type": "function"
   },
   {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      },
-      {
-        "internalType": "uint256",
-        "name": "",
-        "type": "uint256"
-      },
-      {
-        "internalType": "bytes",
-        "name": "",
-        "type": "bytes"
-      }
-    ],
-    "name": "onERC721Received",
+    "inputs": [],
+    "name": "nftPositionManager",
     "outputs": [
       {
-        "internalType": "bytes4",
+        "internalType": "contract INonfungiblePositionManager",
         "name": "",
-        "type": "bytes4"
+        "type": "address"
       }
     ],
+    "stateMutability": "view",
+    "type": "function"
+  },
+  {
+    "inputs": [
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "address", "name": "", "type": "address" },
+      { "internalType": "uint256", "name": "", "type": "uint256" },
+      { "internalType": "bytes", "name": "", "type": "bytes" }
+    ],
+    "name": "onERC721Received",
+    "outputs": [{ "internalType": "bytes4", "name": "", "type": "bytes4" }],
     "stateMutability": "pure",
     "type": "function"
   },
@@ -329,26 +196,14 @@
   {
     "inputs": [],
     "name": "paused",
-    "outputs": [
-      {
-        "internalType": "bool",
-        "name": "",
-        "type": "bool"
-      }
-    ],
+    "outputs": [{ "internalType": "bool", "name": "", "type": "bool" }],
     "stateMutability": "view",
     "type": "function"
   },
   {
     "inputs": [],
     "name": "rangeOrderResolver",
-    "outputs": [
-      {
-        "internalType": "address",
-        "name": "",
-        "type": "address"
-      }
-    ],
+    "outputs": [{ "internalType": "address", "name": "", "type": "address" }],
     "stateMutability": "view",
     "type": "function"
   },
@@ -361,23 +216,11 @@
             "name": "pool",
             "type": "address"
           },
+          { "internalType": "bool", "name": "zeroForOne", "type": "bool" },
+          { "internalType": "int24", "name": "tickThreshold", "type": "int24" },
+          { "internalType": "uint256", "name": "amountIn", "type": "uint256" },
           {
-            "internalType": "bool",
-            "name": "zeroForOne",
-            "type": "bool"
-          },
-          {
-            "internalType": "int24",
-            "name": "tickThreshold",
-            "type": "int24"
-          },
-          {
-            "internalType": "uint256",
-            "name": "amountIn",
-            "type": "uint256"
-          },
-          {
-            "internalType": "address",
+            "internalType": "address payable",
             "name": "receiver",
             "type": "address"
           },
@@ -403,26 +246,5 @@
     "outputs": [],
     "stateMutability": "nonpayable",
     "type": "function"
-  },
-  {
-    "inputs": [
-      {
-        "internalType": "address",
-        "name": "implementationAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "address",
-        "name": "ownerAddress",
-        "type": "address"
-      },
-      {
-        "internalType": "bytes",
-        "name": "data",
-        "type": "bytes"
-      }
-    ],
-    "stateMutability": "payable",
-    "type": "constructor"
   }
 ]
