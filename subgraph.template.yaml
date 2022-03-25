@@ -1,6 +1,6 @@
 specVersion: 0.0.2
 description: Aave Protection Subgraph
-repository: https://github.com/gelatodigital/aave-protection-subgraph
+repository: https://github.com/gelatodigital/range-orders-subgraph
 schema:
   file: ./schema.graphql
 dataSources:
